@@ -210,10 +210,13 @@ describe("Cooking Queue", () => {
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
     expect(bs.bots[0].order?.id).toBe(1);
+    expect(bs.bots[0].timer).toBeDefined();
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
     expect(vqs.queue[0].bot?.id).toBe(1);
 
     bs.removeBot();
+
+    // Could be improve, find a way to test clearTimeout
 
     expect(bs.botCount).toBe(0);
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
@@ -238,6 +241,35 @@ describe("Cooking Queue", () => {
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
 
     vi.advanceTimersByTime(10000);
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
+    expect(bs.bots[0].order).toBeUndefined();
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
+  });
+
+  it("cooking status should not change if it's below 10 seconds", () => {
+    setup();
+
+    const vqs = useVIPQueueStore();
+    expect(vqs.queueLength).toBe(0);
+
+    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    expect(vqs.queueLength).toBe(1);
+
+    const bs = useBotsStore();
+    bs.addBot({ id: 1, status: BotStatusEnum.IDLE });
+
+    updateCookingStatus();
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
+
+    vi.advanceTimersByTime(9000);
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
+
+    vi.advanceTimersByTime(1000);
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
     expect(bs.bots[0].order).toBeUndefined();

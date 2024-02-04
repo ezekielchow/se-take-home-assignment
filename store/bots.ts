@@ -20,6 +20,10 @@ export const useBotsStore = defineStore("bots", {
     removeBot() {
       const deletedBot = this.bots.pop();
 
+      if (deletedBot?.timer) {
+        clearTimeout(deletedBot.timer);
+      }
+
       const nqs = useNormalQueueStore();
       const vqs = useVIPQueueStore();
 

@@ -23,6 +23,7 @@ export type Bot = {
   id: number;
   status: BotStatusEnum;
   order?: Order;
+  timer?: NodeJS.Timeout;
 };
 
 export type BotStore = {

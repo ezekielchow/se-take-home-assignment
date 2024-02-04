@@ -50,15 +50,16 @@ const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
       return [];
     }
 
+    const cookingTimer: NodeJS.Timeout = setTimeout(() => {
+      markOrderAsDone(order);
+    }, 10000);
+    earliestBot.timer = cookingTimer;
+
     order.status = OrderStatusEnum.COOKING;
     order.bot = earliestBot;
 
     earliestBot.status = BotStatusEnum.COOKING;
     earliestBot.order = order;
-
-    setTimeout(() => {
-      markOrderAsDone(order);
-    }, 10000);
   }
 
   return leftOverBots;
