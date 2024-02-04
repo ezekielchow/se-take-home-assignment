@@ -2,6 +2,7 @@ import App from "@/app.vue";
 import { createPinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "vue";
+import { getCompletedOrders } from "~/services/bots";
 import { updateCookingStatus } from "~/services/queue";
 import { useBotsStore } from "~/store/bots";
 import { useNormalQueueStore } from "~/store/normal_queue";
@@ -166,7 +167,7 @@ describe("Cooking Queue", () => {
 
     expect(bs.bots[1].status).toBe(BotStatusEnum.COOKING);
     expect(bs.bots[1].order?.name).toBe("NORMAL");
-    expect(bs.bots[0].order?.type).toBe(OrderTypeEnum.NORMAL);
+    expect(bs.bots[1].order?.type).toBe(OrderTypeEnum.NORMAL);
 
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
     expect(vqs.queue[0].bot?.id).toBe(1);
@@ -325,5 +326,36 @@ describe("Cooking Queue", () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
     expect(bs.bots[0].order).toBeUndefined();
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
+  });
+
+  it("should get correct number of completed orders for bot", () => {
+    setup();
+
+    const vqs = useVIPQueueStore();
+    expect(vqs.queueLength).toBe(0);
+
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
+    expect(vqs.queueLength).toBe(1);
+
+    const bs = useBotsStore();
+    bs.addBot({ id: 1, status: BotStatusEnum.IDLE });
+
+    updateCookingStatus();
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
+
+    vi.advanceTimersByTime(10000);
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
+    expect(bs.bots[0].order).toBeUndefined();
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
+
+    expect(getCompletedOrders(bs.bots[0]).length).toBe(1);
   });
 });

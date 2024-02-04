@@ -2,7 +2,7 @@
 import { useNormalQueueStore } from "~/store/normal_queue";
 import { useVIPQueueStore } from "~/store/vip_queue";
 import { Order, OrderStatusEnum, OrderTypeEnum, SortOrderEnum } from "~/types";
-import { sortBots } from "@/services/bots";
+import { sortBots, getCompletedOrders } from "@/services/bots";
 import { reactive } from "vue";
 import { useBotsStore } from "~/store/bots";
 
@@ -21,6 +21,7 @@ const bots = useBotsStore();
           {{ `Chef ${String(b.id).padStart(3, "0")}` }}
         </div>
         <div>{{ `Status: ${b.status}` }}</div>
+        <div>{{ `Completed Orders: ${getCompletedOrders(b).length}` }}</div>
       </div>
     </div>
   </div>
