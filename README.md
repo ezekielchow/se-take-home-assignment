@@ -24,13 +24,13 @@ As below is part of the user story:
 
 ### Requirements
 
-1. When "New Normal Order" clicked, a new order should show up "PENDING" Area.
-2. When "New VIP Order" clicked, a new order should show up in "PENDING" Area. It should place in-front of all existing "Normal" order but behind of all existing "VIP" order.
-3. The order number should be unique and increasing.
-4. When "+ Bot" clicked, a bot should be created and start processing the order inside "PENDING" area. after 10 seconds picking up the order, the order should move to "COMPLETE" area. Then the bot should start processing another order if there is any left in "PENDING" area.
-5. If there is no more order in the "PENDING" area, the bot should become IDLE until a new order come in.
-6. When "- Bot" clicked, the newest bot should be destroyed. If the bot is processing an order, it should also stop the process. The order now back to "PENDING" and ready to process by other bot.
-7. No data persistance is needed for this prototype, you may perform all the process inside memory.
+- [x] When "New Normal Order" clicked, a new order should show up "PENDING" Area.
+- [x] When "New VIP Order" clicked, a new order should show up in "PENDING" Area. It should place in-front of all existing "Normal" order but behind of all existing "VIP" order.
+- [x] The order number should be unique and increasing.
+- [x] When "+ Bot" clicked, a bot should be created and start processing the order inside "PENDING" area. after 10 seconds picking up the order, the order should move to "COMPLETE" area. Then the bot should start processing another order if there is any left in "PENDING" area.
+- [x] If there is no more order in the "PENDING" area, the bot should become IDLE until a new order come in.
+- [x] When "- Bot" clicked, the newest bot should be destroyed. If the bot is processing an order, it should also stop the process. The order now back to "PENDING" and ready to process by other bot.
+- [x] No data persistance is needed for this prototype, you may perform all the process inside memory.
 
 ### Functioning Prototype
 

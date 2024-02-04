@@ -6,7 +6,7 @@ import { updateCookingStatus } from "~/services/queue";
 import { useBotsStore } from "~/store/bots";
 import { useNormalQueueStore } from "~/store/normal_queue";
 import { useVIPQueueStore } from "~/store/vip_queue";
-import { Bot, BotStatusEnum, OrderStatusEnum } from "~/types";
+import { Bot, BotStatusEnum, OrderStatusEnum, OrderTypeEnum } from "~/types";
 
 const setup = () => {
   const pinia = createPinia();
@@ -89,12 +89,18 @@ describe("Cooking Queue", () => {
     const nqs = useNormalQueueStore();
     expect(nqs.queueLength).toBe(0);
 
-    nqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    nqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.NORMAL,
+    });
     expect(nqs.queueLength).toBe(1);
     expect(nqs.queue[0].id).toBe(1);
     expect(nqs.queue[0].bot).toBe(undefined);
     expect(nqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
     expect(nqs.queue[0].name).toBe("test");
+    expect(nqs.queue[0].type).toBe(OrderTypeEnum.NORMAL);
 
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
@@ -106,12 +112,18 @@ describe("Cooking Queue", () => {
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
 
-    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
     expect(vqs.queueLength).toBe(1);
     expect(vqs.queue[0].id).toBe(1);
     expect(vqs.queue[0].bot).toBe(undefined);
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
     expect(vqs.queue[0].name).toBe("test");
+    expect(vqs.queue[0].type).toBe(OrderTypeEnum.VIP);
 
     const nqs = useNormalQueueStore();
     expect(nqs.queueLength).toBe(0);
@@ -123,13 +135,23 @@ describe("Cooking Queue", () => {
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
 
-    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "VIP" });
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "VIP",
+      type: OrderTypeEnum.VIP,
+    });
     expect(vqs.queueLength).toBe(1);
 
     const nqs = useNormalQueueStore();
     expect(nqs.queueLength).toBe(0);
 
-    nqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "NORMAL" });
+    nqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "NORMAL",
+      type: OrderTypeEnum.NORMAL,
+    });
     expect(nqs.queueLength).toBe(1);
 
     const bs = useBotsStore();
@@ -140,8 +162,12 @@ describe("Cooking Queue", () => {
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
     expect(bs.bots[0].order?.name).toBe("VIP");
+    expect(bs.bots[0].order?.type).toBe(OrderTypeEnum.VIP);
+
     expect(bs.bots[1].status).toBe(BotStatusEnum.COOKING);
     expect(bs.bots[1].order?.name).toBe("NORMAL");
+    expect(bs.bots[0].order?.type).toBe(OrderTypeEnum.NORMAL);
+
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
     expect(vqs.queue[0].bot?.id).toBe(1);
   });
@@ -152,7 +178,12 @@ describe("Cooking Queue", () => {
     const nqs = useNormalQueueStore();
     expect(nqs.queueLength).toBe(0);
 
-    nqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    nqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.NORMAL,
+    });
     expect(nqs.queueLength).toBe(1);
 
     const vqs = useVIPQueueStore();
@@ -176,7 +207,12 @@ describe("Cooking Queue", () => {
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
 
-    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
     expect(vqs.queueLength).toBe(1);
 
     const nqs = useNormalQueueStore();
@@ -200,7 +236,12 @@ describe("Cooking Queue", () => {
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
 
-    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
     expect(vqs.queueLength).toBe(1);
 
     const bs = useBotsStore();
@@ -229,7 +270,12 @@ describe("Cooking Queue", () => {
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
 
-    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
     expect(vqs.queueLength).toBe(1);
 
     const bs = useBotsStore();
@@ -253,7 +299,12 @@ describe("Cooking Queue", () => {
     const vqs = useVIPQueueStore();
     expect(vqs.queueLength).toBe(0);
 
-    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
     expect(vqs.queueLength).toBe(1);
 
     const bs = useBotsStore();

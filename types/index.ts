@@ -35,4 +35,5 @@ export type Order = {
   status: OrderStatusEnum;
   bot?: Bot;
   name: string;
+  type: OrderTypeEnum;
 };

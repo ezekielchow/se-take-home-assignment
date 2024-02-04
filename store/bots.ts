@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Bot, OrderStatusEnum } from "~/types";
+import { Bot, OrderStatusEnum, OrderTypeEnum } from "~/types";
 import { useNormalQueueStore } from "./normal_queue";
 import { useVIPQueueStore } from "./vip_queue";
 
@@ -24,12 +24,14 @@ export const useBotsStore = defineStore("bots", {
         clearTimeout(deletedBot.timer);
       }
 
-      const nqs = useNormalQueueStore();
-      const vqs = useVIPQueueStore();
-
       if (deletedBot !== undefined && deletedBot.order !== undefined) {
-        nqs.updateStatus(deletedBot.order.id, OrderStatusEnum.PENDING);
-        vqs.updateStatus(deletedBot.order.id, OrderStatusEnum.PENDING);
+        if (deletedBot.order.type === OrderTypeEnum.NORMAL) {
+          const nqs = useNormalQueueStore();
+          nqs.updateStatus(deletedBot.order.id, OrderStatusEnum.PENDING);
+        } else {
+          const vqs = useVIPQueueStore();
+          vqs.updateStatus(deletedBot.order.id, OrderStatusEnum.PENDING);
+        }
       }
     },
   },
