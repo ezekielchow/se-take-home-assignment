@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { defineComponent } from "vue";
-import { addBot, useBots } from "@/store/bots";
-import { Bot, BotStatusEnum } from "@/types/bot";
+import { useBotsStore } from "@/store/bots";
+import { Bot, BotStatusEnum } from "~/types";
 
-const bots = useBots();
+const botStore = useBotsStore();
 
 const add = () => {
-  const newBot: Bot = { id: crypto.randomUUID(), status: BotStatusEnum.IDLE };
-  addBot(newBot);
+  const newBot: Bot = {
+    id: Number(botStore.botCount + 1),
+    status: BotStatusEnum.IDLE,
+  };
+  botStore.addBot(newBot);
 };
 </script>
 
 <template>
-  <div class="flex flex-col border-solid border-2 border-slate-600 my-2 p-5">
-    <span class="mb-2">Bots ({{ bots.length }})</span>
-    <Button @click.prevent="add()" class="m-2">+ Bot</Button>
-    <Button @click.prevent="" class="m-2">- Bot</Button>
-  </div>
+  <span class="mb-2">Active Bots ({{ botStore.botCount }})</span>
+  <Button @click.prevent="add()" class="m-2">+ Bot</Button>
+  <Button @click.prevent="" class="m-2">- Bot</Button>
 </template>

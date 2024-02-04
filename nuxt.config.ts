@@ -3,7 +3,12 @@ import type { NuxtConfig } from "@nuxt/types";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const config: NuxtConfig = {
   devtools: { enabled: true },
-  modules: ["@nuxt/test-utils/module", "@nuxtjs/tailwindcss", "shadcn-nuxt"],
+  modules: [
+    "@nuxt/test-utils/module",
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "@pinia/nuxt",
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
