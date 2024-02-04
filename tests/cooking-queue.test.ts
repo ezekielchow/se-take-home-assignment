@@ -6,7 +6,7 @@ import { updateCookingStatus } from "~/services/queue";
 import { useBotsStore } from "~/store/bots";
 import { useNormalQueueStore } from "~/store/normal_queue";
 import { useVIPQueueStore } from "~/store/vip_queue";
-import { BotStatusEnum, OrderStatusEnum } from "~/types";
+import { Bot, BotStatusEnum, OrderStatusEnum } from "~/types";
 
 const setup = () => {
   const pinia = createPinia();
@@ -28,94 +28,94 @@ describe("Cooking Queue", () => {
     vi.restoreAllMocks();
   });
 
-  // it("should add bot to when add bots clicked", () => {
-  //   setup();
+  it("should add bot to when add bots clicked", () => {
+    setup();
 
-  //   const bs = useBotsStore();
-  //   expect(bs.botCount).toBe(0);
+    const bs = useBotsStore();
+    expect(bs.botCount).toBe(0);
 
-  //   const botsToAdd: Array<Bot> = [
-  //     {
-  //       id: 0,
-  //       status: BotStatusEnum.IDLE,
-  //     },
-  //     {
-  //       id: 1,
-  //       status: BotStatusEnum.IDLE,
-  //     },
-  //   ];
+    const botsToAdd: Array<Bot> = [
+      {
+        id: 0,
+        status: BotStatusEnum.IDLE,
+      },
+      {
+        id: 1,
+        status: BotStatusEnum.IDLE,
+      },
+    ];
 
-  //   for (let i = 0; i < botsToAdd.length; i++) {
-  //     const newBot = botsToAdd[i];
+    for (let i = 0; i < botsToAdd.length; i++) {
+      const newBot = botsToAdd[i];
 
-  //     bs.addBot(newBot);
-  //     expect(bs.botCount).toBe(i + 1);
-  //   }
-  // });
+      bs.addBot(newBot);
+      expect(bs.botCount).toBe(i + 1);
+    }
+  });
 
-  // it("should remove last added bot when remove bot clicked", () => {
-  //   setup();
+  it("should remove last added bot when remove bot clicked", () => {
+    setup();
 
-  //   const bs = useBotsStore();
+    const bs = useBotsStore();
 
-  //   const botsToAdd: Array<Bot> = [
-  //     {
-  //       id: 0,
-  //       status: BotStatusEnum.IDLE,
-  //     },
-  //     {
-  //       id: 1,
-  //       status: BotStatusEnum.IDLE,
-  //     },
-  //   ];
+    const botsToAdd: Array<Bot> = [
+      {
+        id: 0,
+        status: BotStatusEnum.IDLE,
+      },
+      {
+        id: 1,
+        status: BotStatusEnum.IDLE,
+      },
+    ];
 
-  //   for (let i = 0; i < botsToAdd.length; i++) {
-  //     const newBot = botsToAdd[i];
+    for (let i = 0; i < botsToAdd.length; i++) {
+      const newBot = botsToAdd[i];
 
-  //     bs.addBot(newBot);
-  //   }
+      bs.addBot(newBot);
+    }
 
-  //   expect(bs.botCount).toBe(2);
+    expect(bs.botCount).toBe(2);
 
-  //   bs.bots.pop();
+    bs.bots.pop();
 
-  //   expect(bs.botCount).toBe(1);
-  //   expect(bs.bots[0].id).toBe(0);
-  // });
+    expect(bs.botCount).toBe(1);
+    expect(bs.bots[0].id).toBe(0);
+  });
 
-  // it("should add normal order to normal queue on new normal order clicked", () => {
-  //   setup();
+  it("should add normal order to normal queue on new normal order clicked", () => {
+    setup();
 
-  //   const nqs = useNormalQueueStore();
-  //   expect(nqs.queueLength).toBe(0);
+    const nqs = useNormalQueueStore();
+    expect(nqs.queueLength).toBe(0);
 
-  //   nqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
-  //   expect(nqs.queueLength).toBe(1);
-  //   expect(nqs.queue[0].id).toBe(1);
-  //   expect(nqs.queue[0].bot).toBe(undefined);
-  //   expect(nqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
-  //   expect(nqs.queue[0].name).toBe("test");
+    nqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    expect(nqs.queueLength).toBe(1);
+    expect(nqs.queue[0].id).toBe(1);
+    expect(nqs.queue[0].bot).toBe(undefined);
+    expect(nqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
+    expect(nqs.queue[0].name).toBe("test");
 
-  //   const vqs = useVIPQueueStore();
-  //   expect(vqs.queueLength).toBe(0);
-  // });
+    const vqs = useVIPQueueStore();
+    expect(vqs.queueLength).toBe(0);
+  });
 
-  // it("should add vip order to vip queue on new vip order clicked", () => {
-  //   setup();
+  it("should add vip order to vip queue on new vip order clicked", () => {
+    setup();
 
-  //   const vqs = useVIPQueueStore();
-  //   expect(vqs.queueLength).toBe(0);
+    const vqs = useVIPQueueStore();
+    expect(vqs.queueLength).toBe(0);
 
-  //   vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
-  //   expect(vqs.queueLength).toBe(1);
-  //   expect(vqs.queue[0].id).toBe(1);
-  //   expect(vqs.queue[0].bot).toBe(undefined);
-  //   expect(vqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
-  //   expect(vqs.queue[0].name).toBe("test");
+    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    expect(vqs.queueLength).toBe(1);
+    expect(vqs.queue[0].id).toBe(1);
+    expect(vqs.queue[0].bot).toBe(undefined);
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.PENDING);
+    expect(vqs.queue[0].name).toBe("test");
 
-  //   const nqs = useNormalQueueStore();
-  //   expect(nqs.queueLength).toBe(0);
-  // });
+    const nqs = useNormalQueueStore();
+    expect(nqs.queueLength).toBe(0);
+  });
 
   it("earliest bot should pickup order from the vip store first if theres a VIP & Normal order", () => {
     setup();
