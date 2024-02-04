@@ -6,6 +6,7 @@ import { getCompletedOrders } from "~/services/bots";
 import { updateCookingStatus } from "~/services/queue";
 import { useBotsStore } from "~/store/bots";
 import { useNormalQueueStore } from "~/store/normal_queue";
+import { useOperationStore } from "~/store/operation";
 import { useVIPQueueStore } from "~/store/vip_queue";
 import { Bot, BotStatusEnum, OrderStatusEnum, OrderTypeEnum } from "~/types";
 
@@ -357,5 +358,47 @@ describe("Cooking Queue", () => {
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
 
     expect(getCompletedOrders(bs.bots[0]).length).toBe(1);
+  });
+
+  it("should test if starting & pausing operation works", () => {
+    setup();
+
+    const os = useOperationStore();
+    os.startOperation();
+
+    const vqs = useVIPQueueStore();
+    expect(vqs.queueLength).toBe(0);
+
+    vqs.addOrder({
+      id: 1,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
+    vqs.addOrder({
+      id: 2,
+      status: OrderStatusEnum.PENDING,
+      name: "test",
+      type: OrderTypeEnum.VIP,
+    });
+    expect(vqs.queueLength).toBe(2);
+
+    const bs = useBotsStore();
+    bs.addBot({ id: 1, status: BotStatusEnum.IDLE });
+
+    updateCookingStatus();
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
+    expect(vqs.queue[1].status).toBe(OrderStatusEnum.PENDING);
+
+    os.stopOperation();
+
+    vi.advanceTimersByTime(12000);
+
+    expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
+    expect(bs.bots[0].order).toBeUndefined();
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
+    expect(vqs.queue[1].status).toBe(OrderStatusEnum.PENDING);
   });
 });

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { defineComponent } from "vue";
-import { addBot, useBots } from "@/store/bots";
 import {
   Bot,
   BotStatusEnum,
@@ -19,6 +18,7 @@ const newOrder = (type: OrderTypeEnum) => {
     id: 0,
     status: OrderStatusEnum.PENDING,
     name: "",
+    type: type,
   };
 
   if (type === OrderTypeEnum.NORMAL) {

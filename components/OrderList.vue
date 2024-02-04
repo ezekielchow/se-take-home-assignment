@@ -2,7 +2,7 @@
 import { useNormalQueueStore } from "~/store/normal_queue";
 import { useVIPQueueStore } from "~/store/vip_queue";
 import { Order, OrderStatusEnum, OrderTypeEnum, SortOrderEnum } from "~/types";
-import { sortQueue } from "@/services/queue";
+import { sortQueue } from "~/services/queue";
 import { reactive } from "vue";
 
 const props = defineProps(["orderType", "sortOrder", "status"]);

@@ -2,7 +2,7 @@
 import { useNormalQueueStore } from "~/store/normal_queue";
 import { useVIPQueueStore } from "~/store/vip_queue";
 import { Order, OrderStatusEnum, OrderTypeEnum, SortOrderEnum } from "~/types";
-import { sortBots, getCompletedOrders } from "@/services/bots";
+import { sortBots, getCompletedOrders } from "~/services/bots";
 import { reactive } from "vue";
 import { useBotsStore } from "~/store/bots";
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineComponent } from "vue";
-import { useBotsStore } from "@/store/bots";
+import { useBotsStore } from "~/store/bots";
 import { Bot, BotStatusEnum } from "~/types";
 
 const botStore = useBotsStore();

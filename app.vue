@@ -6,10 +6,6 @@ import { startCooking, updateCookingStatus } from "./services/queue";
 import { useNormalQueueStore } from "./store/normal_queue";
 import { useVIPQueueStore } from "./store/vip_queue";
 import { getOrdersCount } from "./services/queue";
-
-onMounted(() => {
-  startCooking();
-});
 </script>
 
 <template>
@@ -19,6 +15,11 @@ onMounted(() => {
       <h2>Track your order here</h2>
       <div class="flex flex-col">
         <div class="flex">
+          <div
+            class="flex flex-col border-solid border-2 border-slate-600 my-2 p-5"
+          >
+            <cooking-actions />
+          </div>
           <div
             class="flex flex-col border-solid border-2 border-slate-600 my-2 p-5"
           >
