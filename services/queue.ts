@@ -25,6 +25,15 @@ export const sortQueue = (
     });
 };
 
+const markOrderAsDone = (order: Order) => {
+  order.status = OrderStatusEnum.COOKED;
+
+  if (order.bot) {
+    order.bot.status = BotStatusEnum.IDLE;
+    order.bot.order = undefined;
+  }
+};
+
 const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
   const leftOverBots = freeBots;
 
@@ -46,6 +55,10 @@ const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
 
     earliestBot.status = BotStatusEnum.COOKING;
     earliestBot.order = order;
+
+    setTimeout(() => {
+      markOrderAsDone(order);
+    }, 10000);
   }
 
   return leftOverBots;
@@ -92,4 +105,18 @@ export const startCooking = (): NodeJS.Timeout => {
   const intervalID = setInterval(updateCookingStatus, 1000);
 
   return intervalID;
+};
+
+export const getOrdersCount = (status: OrderStatusEnum) => {
+  const nq = useNormalQueueStore();
+  const vq = useVIPQueueStore();
+
+  return (
+    nq.queue.filter((order: Order) => {
+      return order.status === status;
+    }).length +
+    vq.queue.filter((order: Order) => {
+      return order.status === status;
+    }).length
+  );
 };

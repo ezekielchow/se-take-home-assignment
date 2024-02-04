@@ -17,5 +17,5 @@ const add = () => {
 <template>
   <span class="mb-2">Active Bots ({{ botStore.botCount }})</span>
   <Button @click.prevent="add()" class="m-2">+ Bot</Button>
-  <Button @click.prevent="" class="m-2">- Bot</Button>
+  <Button @click.prevent="botStore.removeBot" class="m-2">- Bot</Button>
 </template>

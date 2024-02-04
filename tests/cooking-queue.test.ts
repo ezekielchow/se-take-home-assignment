@@ -220,32 +220,27 @@ describe("Cooking Queue", () => {
     expect(vqs.queue[0].bot).toBeUndefined();
   });
 
-  // it("should change cooking status to done after 10 seconds", () => {
-  //   setup();
+  it("should change cooking status to done after 10 seconds", () => {
+    setup();
 
-  //   const vqs = useVIPQueueStore();
-  //   expect(vqs.queueLength).toBe(0);
+    const vqs = useVIPQueueStore();
+    expect(vqs.queueLength).toBe(0);
 
-  //   vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
-  //   expect(vqs.queueLength).toBe(1);
+    vqs.addOrder({ id: 1, status: OrderStatusEnum.PENDING, name: "test" });
+    expect(vqs.queueLength).toBe(1);
 
-  //   const bs = useBotsStore();
-  //   bs.addBot({ id: 1, status: BotStatusEnum.IDLE });
+    const bs = useBotsStore();
+    bs.addBot({ id: 1, status: BotStatusEnum.IDLE });
 
-  //   const cookingSession = startCooking();
+    updateCookingStatus();
 
-  //   setTimeout(() => {
-  //     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
-  //     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
-  //   }, 2000);
+    expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
 
-  //   setTimeout(() => {
-  //     console.log("came in here");
+    vi.advanceTimersByTime(10000);
 
-  //     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
-  //     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
-  //   }, 10000);
-
-  //   clearInterval(cookingSession);
-  // });
+    expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
+    expect(bs.bots[0].order).toBeUndefined();
+    expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKED);
+  });
 });
