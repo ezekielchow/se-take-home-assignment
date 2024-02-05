@@ -52,7 +52,7 @@ const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
 
     const cookingTimer: NodeJS.Timeout = setTimeout(() => {
       markOrderAsDone(order);
-    }, 10000);
+    }, Number(process.env.TIME_PER_ORDER_MILLISECONDS));
     earliestBot.timer = cookingTimer;
 
     order.status = OrderStatusEnum.COOKING;
@@ -103,7 +103,10 @@ export const updateCookingStatus = () => {
 };
 
 export const startCooking = (): NodeJS.Timeout => {
-  const intervalID = setInterval(updateCookingStatus, 1000);
+  const intervalID = setInterval(
+    updateCookingStatus,
+    Number(process.env.DASHBOARD_UPDATE_MILLISECONDS)
+  );
 
   return intervalID;
 };

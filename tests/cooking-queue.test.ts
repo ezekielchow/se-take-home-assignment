@@ -288,7 +288,9 @@ describe("Cooking Queue", () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
 
-    vi.advanceTimersByTime(10000);
+    console.log(process.env.TIME_PER_ORDER_MILLISECONDS);
+
+    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS));
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
     expect(bs.bots[0].order).toBeUndefined();
@@ -317,12 +319,12 @@ describe("Cooking Queue", () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
 
-    vi.advanceTimersByTime(9000);
+    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS) / 2);
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
 
-    vi.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS) / 2);
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
     expect(bs.bots[0].order).toBeUndefined();
@@ -351,7 +353,7 @@ describe("Cooking Queue", () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING);
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING);
 
-    vi.advanceTimersByTime(10000);
+    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS));
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
     expect(bs.bots[0].order).toBeUndefined();
@@ -394,7 +396,9 @@ describe("Cooking Queue", () => {
 
     os.stopOperation();
 
-    vi.advanceTimersByTime(12000);
+    vi.advanceTimersByTime(
+      Number(process.env.TIME_PER_ORDER_MILLISECONDS) + 1000
+    );
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE);
     expect(bs.bots[0].order).toBeUndefined();
