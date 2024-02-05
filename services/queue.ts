@@ -1,6 +1,5 @@
 import { useBotsStore } from '~/store/bots'
 import { useNormalQueueStore } from '~/store/normal_queue'
-import { markOrderAsDone } from '~/store/orders'
 import { useVIPQueueStore } from '~/store/vip_queue'
 import {
   Bot,
@@ -10,6 +9,7 @@ import {
   SortOrderEnum
 } from '~/types'
 import { TIME_PER_ORDER_MILLISECONDS } from '../config/config'
+import { markOrderAsDone } from '../store/orders'
 
 export const sortQueue = (
   queue: Order[],
@@ -105,4 +105,26 @@ export const getOrdersCount = (status: OrderStatusEnum) => {
       return order.status === status
     }).length
   )
+}
+
+const plusTimer = (orders: Order[]) => {
+  for (let i = 0; i < orders.length; i++) {
+    const order: Order = orders[i]
+    order.timer += 1
+  }
+}
+
+export const updateOrderTimers = () => {
+  const nq = useNormalQueueStore()
+  const vq = useVIPQueueStore()
+
+  const vqPendingOrders = vq.queue.filter(
+    (order: Order) => order.status === OrderStatusEnum.COOKING
+  )
+  const nqPendingOrders = nq.queue.filter(
+    (order: Order) => order.status === OrderStatusEnum.COOKING
+  )
+
+  plusTimer(vqPendingOrders)
+  plusTimer(nqPendingOrders)
 }

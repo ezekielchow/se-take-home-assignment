@@ -15,7 +15,8 @@ const newOrder = (type: OrderTypeEnum) => {
     id: 0,
     status: OrderStatusEnum.PENDING,
     name: '',
-    type
+    type,
+    timer: 0
   }
 
   if (type === OrderTypeEnum.NORMAL) {

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { DASHBOARD_UPDATE_MILLISECONDS } from '~/config/config'
-import { updateCookingStatus } from '~/services/queue'
+import { updateCookingStatus, updateOrderTimers } from '../services/queue'
 
 type State = {
   operation: NodeJS.Timeout | undefined
@@ -14,10 +14,10 @@ export const useOperationStore = defineStore('operation', {
   },
   actions: {
     startOperation() {
-      this.operation = setInterval(
-        updateCookingStatus,
-        DASHBOARD_UPDATE_MILLISECONDS
-      )
+      this.operation = setInterval(() => {
+        updateOrderTimers()
+        updateCookingStatus()
+      }, DASHBOARD_UPDATE_MILLISECONDS)
     },
     stopOperation() {
       this.operation && clearInterval(this.operation)

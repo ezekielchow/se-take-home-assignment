@@ -26,6 +26,7 @@ export type Order = {
   bot?: Bot
   name: string
   type: OrderTypeEnum
+  timer: number
 }
 
 export type Bot = {
