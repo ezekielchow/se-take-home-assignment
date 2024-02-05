@@ -1,31 +1,34 @@
-import { defineStore } from "pinia";
-import { Order, OrderStatusEnum } from "~/types";
+import { defineStore } from 'pinia'
+import { Order, OrderStatusEnum } from '~/types'
 
 type State = {
-  queue: Order[];
-};
+  queue: Order[]
+}
 
-export const useVIPQueueStore = defineStore("vip-queue", {
+export const useVIPQueueStore = defineStore('vip-queue', {
   state: (): State => {
     return {
-      queue: [],
-    };
+      queue: []
+    }
   },
   actions: {
     addOrder(order: Order) {
-      this.queue.push(order);
+      this.queue.push(order)
     },
     updateStatus(id: number, status: OrderStatusEnum) {
-      const index = this.queue.findIndex((order) => order.id === id);
+      const index = this.queue.findIndex((order: Order) => {
+        return order.id === id
+      })
+
       if (index !== -1) {
-        this.queue[index].status = status;
-        this.queue[index].bot = undefined;
+        this.queue[index].status = status
+        this.queue[index].bot = undefined
       }
-    },
+    }
   },
   getters: {
     queueLength(): number {
-      return this.queue.length;
-    },
-  },
-});
+      return this.queue.length
+    }
+  }
+})

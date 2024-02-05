@@ -1,44 +1,47 @@
 <script setup lang="ts">
-import { defineComponent } from "vue";
+import { useNormalQueueStore } from '~/store/normal_queue';
+import { useVIPQueueStore } from '~/store/vip_queue';
 import {
-  Bot,
-  BotStatusEnum,
-  Order,
-  OrderStatusEnum,
-  OrderTypeEnum,
-} from "~/types";
-import { useNormalQueueStore } from "~/store/normal_queue";
-import { useVIPQueueStore } from "~/store/vip_queue";
+Order,
+OrderStatusEnum,
+OrderTypeEnum
+} from '~/types';
 
-const nqs = useNormalQueueStore();
-const vqs = useVIPQueueStore();
+const nqs = useNormalQueueStore()
+const vqs = useVIPQueueStore()
 
 const newOrder = (type: OrderTypeEnum) => {
   const newOrder: Order = {
     id: 0,
     status: OrderStatusEnum.PENDING,
-    name: "",
-    type: type,
-  };
+    name: '',
+    type
+  }
 
   if (type === OrderTypeEnum.NORMAL) {
-    newOrder.id = nqs.queueLength + 1;
-    newOrder.name = `Normal Order ${newOrder.id}`;
-    nqs.addOrder(newOrder);
+    newOrder.id = nqs.queueLength + 1
+    newOrder.name = `Normal Order ${newOrder.id}`
+    nqs.addOrder(newOrder)
   } else {
-    newOrder.id = vqs.queueLength + 1;
-    newOrder.name = `VIP Order ${newOrder.id}`;
-    vqs.addOrder(newOrder);
+    newOrder.id = vqs.queueLength + 1
+    newOrder.name = `VIP Order ${newOrder.id}`
+    vqs.addOrder(newOrder)
   }
-};
+}
 </script>
 
 <template>
   <span class="mb-2">Orders</span>
-  <Button @click.prevent="newOrder(OrderTypeEnum.NORMAL)" class="m-2"
-    >New Normal Order</Button
+  <Button
+    class="m-2"
+    @click.prevent="newOrder(OrderTypeEnum.NORMAL)"
   >
-  <Button @click.prevent="newOrder(OrderTypeEnum.VIP)" class="m-2"
-    >New VIP Order</Button
+    New Normal Order
+  </Button>
+  <Button
+    class="m-2"
+    @click.prevent="newOrder(OrderTypeEnum.VIP)"
   >
+    New VIP Order
+  </Button>
 </template>

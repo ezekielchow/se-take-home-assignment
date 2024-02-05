@@ -1,13 +1,13 @@
-import { useBotsStore } from "~/store/bots";
-import { useNormalQueueStore } from "~/store/normal_queue";
-import { useVIPQueueStore } from "~/store/vip_queue";
+import { useBotsStore } from '~/store/bots'
+import { useNormalQueueStore } from '~/store/normal_queue'
+import { useVIPQueueStore } from '~/store/vip_queue'
 import {
   Bot,
   BotStatusEnum,
   Order,
   OrderStatusEnum,
-  SortOrderEnum,
-} from "~/types";
+  SortOrderEnum
+} from '~/types'
 
 export const sortQueue = (
   queue: Order[],
@@ -15,112 +15,110 @@ export const sortQueue = (
   sortOrder: SortOrderEnum
 ) => {
   return queue
-    .filter((order) => order.status === status)
+    .filter((order: Order) => order.status === status)
     .sort((a, b) => {
       if (sortOrder === SortOrderEnum.ASC) {
-        return a.id - b.id;
+        return a.id - b.id
       } else {
-        return b.id - a.id;
+        return b.id - a.id
       }
-    });
-};
+    })
+}
 
 const markOrderAsDone = (order: Order) => {
-  order.status = OrderStatusEnum.COOKED;
+  order.status = OrderStatusEnum.COOKED
 
   if (order.bot) {
-    order.bot.status = BotStatusEnum.IDLE;
-    order.bot.order = undefined;
+    order.bot.status = BotStatusEnum.IDLE
+    order.bot.order = undefined
   }
-};
+}
 
 const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
-  const leftOverBots = freeBots;
+  const leftOverBots = freeBots
 
   for (let i = 0; i < orders.length; i++) {
-    const order: Order = orders[i];
+    const order: Order = orders[i]
 
     if (leftOverBots.length < 1) {
-      return [];
+      return []
     }
 
-    const earliestBot = leftOverBots.shift();
+    const earliestBot = leftOverBots.shift()
 
     if (!earliestBot) {
-      return [];
+      return []
     }
 
     const cookingTimer: NodeJS.Timeout = setTimeout(() => {
-      markOrderAsDone(order);
-    }, Number(process.env.TIME_PER_ORDER_MILLISECONDS));
-    earliestBot.timer = cookingTimer;
+      markOrderAsDone(order)
+    }, Number(process.env.TIME_PER_ORDER_MILLISECONDS))
+    earliestBot.timer = cookingTimer
 
-    order.status = OrderStatusEnum.COOKING;
-    order.bot = earliestBot;
+    order.status = OrderStatusEnum.COOKING
+    order.bot = earliestBot
 
-    earliestBot.status = BotStatusEnum.COOKING;
-    earliestBot.order = order;
+    earliestBot.status = BotStatusEnum.COOKING
+    earliestBot.order = order
   }
 
-  return leftOverBots;
-};
+  return leftOverBots
+}
 
 export const updateCookingStatus = () => {
-  const bs = useBotsStore();
-  const nq = useNormalQueueStore();
-  const vq = useVIPQueueStore();
+  const bs = useBotsStore()
+  const nq = useNormalQueueStore()
+  const vq = useVIPQueueStore()
 
   const vqPendingOrders = vq.queue.filter(
-    (order) => order.status === OrderStatusEnum.PENDING
-  );
+    (order: Order) => order.status === OrderStatusEnum.PENDING
+  )
   const nqPendingOrders = nq.queue.filter(
-    (order) => order.status === OrderStatusEnum.PENDING
-  );
+    (order: Order) => order.status === OrderStatusEnum.PENDING
+  )
 
   if (nqPendingOrders.length < 1 && vqPendingOrders.length < 1) {
-    return;
+    return
   }
 
-  let freeBots = bs.bots.filter((bot) => bot.status === BotStatusEnum.IDLE);
+  let freeBots = bs.bots.filter((bot: Bot) => bot.status === BotStatusEnum.IDLE)
 
   if (freeBots.length < 1) {
-    return;
+    return
   }
 
   if (vq.queueLength > 0) {
-    freeBots = assignBots(vqPendingOrders, freeBots);
+    freeBots = assignBots(vqPendingOrders, freeBots)
   }
 
   if (freeBots.length < 1) {
-    return;
+    return
   }
 
   if (nq.queueLength > 0) {
-    assignBots(nqPendingOrders, freeBots);
+    assignBots(nqPendingOrders, freeBots)
   }
-
-  return;
-};
+}
 
 export const startCooking = (): NodeJS.Timeout => {
   const intervalID = setInterval(
     updateCookingStatus,
     Number(process.env.DASHBOARD_UPDATE_MILLISECONDS)
-  );
+  )
 
-  return intervalID;
-};
+  return intervalID
+}
 
 export const getOrdersCount = (status: OrderStatusEnum) => {
-  const nq = useNormalQueueStore();
-  const vq = useVIPQueueStore();
+  const nq = useNormalQueueStore()
+  const vq = useVIPQueueStore()
 
   return (
     nq.queue.filter((order: Order) => {
-      return order.status === status;
+      return order.status === status
     }).length +
     vq.queue.filter((order: Order) => {
-      return order.status === status;
+      return order.status === status
     }).length
-  );
-};
+  )
+}

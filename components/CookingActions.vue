@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useOperationStore } from "~/store/operation";
+import { onMounted } from 'vue';
+import { useOperationStore } from '~/store/operation';
 
-const operationStore = useOperationStore();
+const operationStore = useOperationStore()
 
 onMounted(() => {
-  operationStore.startOperation();
-});
+  operationStore.startOperation()
+})
 
 const updateOperation = () => {
   if (operationStore.operation === undefined) {
-    operationStore.startOperation();
+    operationStore.startOperation()
   } else {
-    operationStore.stopOperation();
+    operationStore.stopOperation()
   }
-};
+}
 </script>
 
 <template>
   <span class="mb-2">Operation</span>
-  <Button @click.prevent="updateOperation" class="m-2">
+  <Button class="m-2" @click.prevent="updateOperation">
     {{
       operationStore.operation === undefined ? "Start Cooking" : "Stop Cooking"
     }}

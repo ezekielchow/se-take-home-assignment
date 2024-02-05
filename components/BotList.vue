@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { useNormalQueueStore } from "~/store/normal_queue";
-import { useVIPQueueStore } from "~/store/vip_queue";
-import { Order, OrderStatusEnum, OrderTypeEnum, SortOrderEnum } from "~/types";
-import { sortBots, getCompletedOrders } from "~/services/bots";
-import { reactive } from "vue";
-import { useBotsStore } from "~/store/bots";
+import { getCompletedOrders, sortBots } from '~/services/bots'
+import { useBotsStore } from '~/store/bots'
+import { SortOrderEnum } from '~/types'
 
-const bots = useBotsStore();
+const bots = useBotsStore()
 </script>
 
 <template>
   <div class="flex flex-col">
     <div
       v-for="b in sortBots(bots.bots, SortOrderEnum.ASC)"
-      v-bind:key="b.id"
+      :key="b.id"
       class="border-slate-600 border-2 rounded my-2"
     >
       <div class="flex flex-col p-2">
