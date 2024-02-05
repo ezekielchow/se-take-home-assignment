@@ -1,5 +1,6 @@
 import { useBotsStore } from '~/store/bots'
 import { useNormalQueueStore } from '~/store/normal_queue'
+import { markOrderAsDone } from '~/store/orders'
 import { useVIPQueueStore } from '~/store/vip_queue'
 import {
   Bot,
@@ -23,15 +24,6 @@ export const sortQueue = (
         return b.id - a.id
       }
     })
-}
-
-const markOrderAsDone = (order: Order) => {
-  order.status = OrderStatusEnum.COOKED
-
-  if (order.bot) {
-    order.bot.status = BotStatusEnum.IDLE
-    order.bot.order = undefined
-  }
 }
 
 const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
