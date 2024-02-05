@@ -2,6 +2,7 @@ import App from '@/app.vue'
 import { createPinia } from 'pinia'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createApp } from 'vue'
+import { TIME_PER_ORDER_MILLISECONDS } from '~/config/config'
 import { getCompletedOrders } from '~/services/bots'
 import { updateCookingStatus } from '~/services/queue'
 import { useBotsStore } from '~/store/bots'
@@ -288,9 +289,7 @@ describe('Cooking Queue', () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING)
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING)
 
-    console.log(process.env.TIME_PER_ORDER_MILLISECONDS)
-
-    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS))
+    vi.advanceTimersByTime(TIME_PER_ORDER_MILLISECONDS)
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE)
     expect(bs.bots[0].order).toBeUndefined()
@@ -319,12 +318,12 @@ describe('Cooking Queue', () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING)
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING)
 
-    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS) / 2)
+    vi.advanceTimersByTime(TIME_PER_ORDER_MILLISECONDS / 2)
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING)
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING)
 
-    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS) / 2)
+    vi.advanceTimersByTime(TIME_PER_ORDER_MILLISECONDS / 2)
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE)
     expect(bs.bots[0].order).toBeUndefined()
@@ -353,7 +352,7 @@ describe('Cooking Queue', () => {
     expect(bs.bots[0].status).toBe(BotStatusEnum.COOKING)
     expect(vqs.queue[0].status).toBe(OrderStatusEnum.COOKING)
 
-    vi.advanceTimersByTime(Number(process.env.TIME_PER_ORDER_MILLISECONDS))
+    vi.advanceTimersByTime(TIME_PER_ORDER_MILLISECONDS)
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE)
     expect(bs.bots[0].order).toBeUndefined()
@@ -397,7 +396,7 @@ describe('Cooking Queue', () => {
     os.stopOperation()
 
     vi.advanceTimersByTime(
-      Number(process.env.TIME_PER_ORDER_MILLISECONDS) + 1000
+      TIME_PER_ORDER_MILLISECONDS + 1000
     )
 
     expect(bs.bots[0].status).toBe(BotStatusEnum.IDLE)

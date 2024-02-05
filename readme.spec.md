@@ -32,7 +32,7 @@
 
 ### Setup
 
-1. Create .env from .env.sample & set values
+1. Run npm run dev
 2. Go to htttp://localhost:**PORT_NUMBER**
 
 ### Usage

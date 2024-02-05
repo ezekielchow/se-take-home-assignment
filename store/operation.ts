@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { DASHBOARD_UPDATE_MILLISECONDS } from '~/config/config'
 import { updateCookingStatus } from '~/services/queue'
 
 type State = {
@@ -13,7 +14,10 @@ export const useOperationStore = defineStore('operation', {
   },
   actions: {
     startOperation() {
-      this.operation = setInterval(updateCookingStatus, 1000)
+      this.operation = setInterval(
+        updateCookingStatus,
+        DASHBOARD_UPDATE_MILLISECONDS
+      )
     },
     stopOperation() {
       this.operation && clearInterval(this.operation)

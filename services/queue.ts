@@ -9,6 +9,7 @@ import {
   OrderStatusEnum,
   SortOrderEnum
 } from '~/types'
+import { TIME_PER_ORDER_MILLISECONDS } from '../config/config'
 
 export const sortQueue = (
   queue: Order[],
@@ -44,7 +45,7 @@ const assignBots = (orders: Order[], freeBots: Bot[]): Bot[] => {
 
     const cookingTimer: NodeJS.Timeout = setTimeout(() => {
       markOrderAsDone(order)
-    }, Number(process.env.TIME_PER_ORDER_MILLISECONDS))
+    }, TIME_PER_ORDER_MILLISECONDS)
     earliestBot.timer = cookingTimer
 
     order.status = OrderStatusEnum.COOKING
@@ -90,15 +91,6 @@ export const updateCookingStatus = () => {
   if (nq.queueLength > 0) {
     assignBots(nqPendingOrders, freeBots)
   }
-}
-
-export const startCooking = (): NodeJS.Timeout => {
-  const intervalID = setInterval(
-    updateCookingStatus,
-    Number(process.env.DASHBOARD_UPDATE_MILLISECONDS)
-  )
-
-  return intervalID
 }
 
 export const getOrdersCount = (status: OrderStatusEnum) => {
