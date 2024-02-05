@@ -35,9 +35,23 @@
 1. Run npm run dev
 2. Go to htttp://localhost:**PORT_NUMBER**
 
+### Testing
+
+1. Run npm run test
+
+### Linting
+
+1. Run npm run lint
+
 ### Usage
 
 1. Cooking process will automatically be started
 2. Add an order
 3. Add a bot to start cooking
 4. (Stop cooking) will stop bots from picking up orders. Pending bots however will finish up their orders if there's any orders in progress
+
+### Future Ideas
+
+1. To use env file for cooking timings. Unable to find a way to test .env variables ATM
+2. Bots prioritizing; Bot will be force to prioritize normal order first
+3. Better queue system; To manage workload rather than putting all the workload on the earliest bot created
