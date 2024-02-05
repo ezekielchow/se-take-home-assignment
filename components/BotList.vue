@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { getCompletedOrders, sortBots } from '~/services/bots'
-import { useBotsStore } from '~/store/bots'
-import { SortOrderEnum } from '~/types'
+import { getCompletedOrders, sortBots } from '~/services/bots';
+import { useBotsStore } from '~/store/bots';
+import { SortOrderEnum } from '~/types';
 
 const bots = useBotsStore()
 </script>
 
 <template>
   <div class="flex flex-col">
+    <div v-if="bots.bots.length < 1">
+      Start cooking by adding bots to the kitchen
+    </div>
     <div
       v-for="b in sortBots(bots.bots, SortOrderEnum.ASC)"
       :key="b.id"

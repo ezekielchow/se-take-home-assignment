@@ -30,9 +30,14 @@
 - [TailwindCss](https://tailwindcss.com/)
   - Quick styling of components
 
-## Setup
+### Setup
 
 1. Create .env from .env.sample & set values
 2. Go to htttp://localhost:**PORT_NUMBER**
-3. Cooking process will automatically be started
+
+### Usage
+
+1. Cooking process will automatically be started
+2. Add an order
+3. Add a bot to start cooking
 4. (Stop cooking) will stop bots from picking up orders. Pending bots however will finish up their orders if there's any orders in progress

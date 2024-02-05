@@ -14,7 +14,7 @@ const add = () => {
 </script>
 
 <template>
-  <span class="mb-2">Active Bots ({{ botStore.botCount }})</span>
+  <span class="mb-2">Bots (Active: {{ botStore.botCount }})</span>
   <Button class="m-2" @click.prevent="add()">
     + Bot
   </Button>
